@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel</title>
+
+<style>
+body{
+    background:linear-gradient(135deg,#000,#300000,#9b0000);
+    color:white;
+    font-family:Arial;
+    padding:20px;
+}
+
+h1{
+    color:#ffcc00;
+    text-align:center;
+}
+
+input{
+    width:100%;
+    padding:13px;
+    border-radius:12px;
+    border:none;
+    margin:15px 0;
+    font-size:16px;
+}
+
+.card{
+    background:#111;
+    border:2px solid #ffcc00;
+    border-radius:15px;
+    padding:15px;
+    margin-bottom:15px;
+}
+
+.card h3{
+    color:#ffcc00;
+}
+
+.card p{
+    line-height:1.7;
+}
+</style>
+</head>
+
+<body>
+
+<h1>உறுப்பினர் பட்டியல்</h1>
+
+<input type="text" id="search" placeholder="பெயர் / மொபைல் / தொகுதி தேடவும்" onkeyup="searchMembers()">
+
+<div id="memberList"></div>
+
+<script>
+let members = [];
+
+fetch("https://udanpirappu-backend.onrender.com/api/members")
+.then(res => res.json())
+.then(data => {
+    members = data;
+    displayMembers(members);
+});
+
+function displayMembers(data){
+    let output = "";
+
+    data.forEach(member => {
+        output += `
+        <div class="card">
+            <h3>${member.name}</h3>
+            <p><b>வாக்காளர் எண்:</b> ${member.voterId}</p>
+            <p><b>மொபைல்:</b> ${member.phone}</p>
+            <p><b>மாவட்டம்:</b> ${member.district}</p>
+            <p><b>தொகுதி:</b> ${member.constituency}</p>
+            <p><b>முகவரி:</b> ${member.address}</p>
+        </div>
+        `;
+    });
+
+    document.getElementById("memberList").innerHTML = output;
+}
+
+function searchMembers(){
+    let value = document.getElementById("search").value.toLowerCase();
+
+    let filtered = members.filter(member =>
+        member.name?.toLowerCase().includes(value) ||
+        member.phone?.includes(value) ||
+        member.constituency?.toLowerCase().includes(value)
+    );
+
+    displayMembers(filtered);
+}
+</script>
+
+</body>
+</html>

@@ -7,9 +7,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect(process.env.MONGO_URL)
-.then(() => console.log("MongoDB connected"))
-.catch(err => console.log(err));
+const MONGO_URL = process.env.MONGO_URL;
+
+if (!MONGO_URL) {
+  console.log("MONGO_URL is missing");
+}
+
+mongoose.connect(MONGO_URL)
+.then(() => console.log("MongoDB connected successfully"))
+.catch(err => console.log("MongoDB connection error:", err));
 
 const memberSchema = new mongoose.Schema({
   voterId: String,
@@ -35,25 +41,34 @@ app.get("/", (req, res) => {
 
 app.post("/api/register", async (req, res) => {
   try {
-    const member = new Member(req.body);
-    await member.save();
+    const member = await Member.create(req.body);
 
     res.json({
       success: true,
       message: "Member registered successfully",
       memberId: member._id
     });
+
   } catch (error) {
+    console.log("Register error:", error);
+
     res.status(500).json({
       success: false,
-      message: "Registration failed"
+      message: error.message
     });
   }
 });
 
 app.get("/api/members", async (req, res) => {
-  const members = await Member.find().sort({ createdAt: -1 });
-  res.json(members);
+  try {
+    const members = await Member.find().sort({ createdAt: -1 });
+    res.json(members);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
 });
 
 const PORT = process.env.PORT || 5000;

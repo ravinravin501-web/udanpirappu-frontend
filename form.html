@@ -100,4 +100,57 @@ button:hover{
         <option value="">தேர்வு செய்யவும்</option>
         <option>ஆண்</option>
         <option>பெண்</option>
-        <option>மற்ற
+        <option>மற்றவை</option>
+    </select>
+
+    <label>தொலைபேசி எண்</label>
+    <input type="tel" id="phone" placeholder="மொபைல் எண்">
+
+    <label>மாவட்டம்</label>
+    <input type="text" id="district" value="கன்னியாகுமரி">
+
+    <label>சட்டமன்ற தொகுதி</label>
+    <select id="constituency">
+        <option value="">தேர்வு செய்யவும்</option>
+        <option>கன்னியாகுமரி</option>
+        <option>நாகர்கோவில்</option>
+        <option>குளச்சல்</option>
+        <option>பத்மநாபபுரம்</option>
+        <option>விளவங்கோடு</option>
+        <option>கிள்ளியூர்</option>
+    </select>
+
+    <label>முகவரி</label>
+    <textarea id="address" placeholder="உங்கள் முகவரி"></textarea>
+
+    <button onclick="submitForm()">பதிவு செய்</button>
+</div>
+
+<script>
+document.getElementById("voterId").value = localStorage.getItem("voterId") || "";
+
+function submitForm(){
+    let memberData = {
+        voterId: document.getElementById("voterId").value,
+        name: document.getElementById("name").value,
+        fatherName: document.getElementById("fatherName").value,
+        dob: document.getElementById("dob").value,
+        gender: document.getElementById("gender").value,
+        phone: document.getElementById("phone").value,
+        district: document.getElementById("district").value,
+        constituency: document.getElementById("constituency").value,
+        address: document.getElementById("address").value
+    };
+
+    if(memberData.name === "" || memberData.phone === "" || memberData.constituency === ""){
+        alert("பெயர், மொபைல் எண், தொகுதி கட்டாயம்");
+        return;
+    }
+
+    localStorage.setItem("memberData", JSON.stringify(memberData));
+    window.location.href = "card.html";
+}
+</script>
+
+</body>
+</html>

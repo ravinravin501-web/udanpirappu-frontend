@@ -127,9 +127,11 @@ button:hover{
 </div>
 
 <script>
+
 document.getElementById("voterId").value = localStorage.getItem("voterId") || "";
 
 function submitForm(){
+
     let memberData = {
         voterId: document.getElementById("voterId").value,
         name: document.getElementById("name").value,
@@ -147,9 +149,29 @@ function submitForm(){
         return;
     }
 
-    localStorage.setItem("memberData", JSON.stringify(memberData));
-    window.location.href = "card.html";
+    fetch("https://udanpirappu-backend.onrender.com/api/register",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify(memberData)
+    })
+    .then(res=>res.json())
+    .then(data=>{
+
+        localStorage.setItem("memberData", JSON.stringify(memberData));
+
+        alert("பதிவு வெற்றிகரமாக முடிந்தது");
+
+        window.location.href="card.html";
+
+    })
+    .catch(err=>{
+        alert("Server error");
+    });
+
 }
+
 </script>
 
 </body>

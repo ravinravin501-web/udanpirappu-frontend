@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>உடன்பிறப்புகளாய் இணைவோம்</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#000,#300000,#9b0000);
+    color:white;
+    overflow-x:hidden;
+}
+
+.main{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    position:relative;
+}
+
+.bg-left,
+.bg-right{
+    position:absolute;
+    bottom:0;
+    width:38%;
+    max-width:420px;
+    opacity:0.9;
+    z-index:1;
+}
+
+.bg-left{
+    left:0;
+}
+
+.bg-right{
+    right:0;
+}
+
+.card{
+    width:100%;
+    max-width:420px;
+    background:rgba(0,0,0,0.82);
+    border:2px solid #ffcc00;
+    border-radius:28px;
+    padding:30px 22px;
+    text-align:center;
+    z-index:5;
+    box-shadow:0 0 35px rgba(255,0,0,0.6);
+}
+
+.logo{
+    width:90px;
+    margin-bottom:15px;
+}
+
+h1{
+    color:#ffcc00;
+    font-size:30px;
+    line-height:1.3;
+    margin-bottom:10px;
+}
+
+.subtitle{
+    color:white;
+    font-size:17px;
+    margin-bottom:25px;
+}
+
+.input-box{
+    width:100%;
+    padding:15px;
+    border-radius:14px;
+    border:2px solid #ffcc00;
+    font-size:17px;
+    outline:none;
+    margin-bottom:18px;
+    text-align:center;
+}
+
+.btn{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:15px;
+    background:red;
+    color:white;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-top:10px;
+}
+
+.btn:hover{
+    background:#cc0000;
+}
+
+.download{
+    background:#ffcc00;
+    color:#000;
+}
+
+.note{
+    margin-top:22px;
+    font-size:14px;
+    color:#ddd;
+}
+
+.footer{
+    position:absolute;
+    bottom:12px;
+    width:100%;
+    text-align:center;
+    color:#ffcc00;
+    font-size:14px;
+    z-index:10;
+}
+
+@media(max-width:768px){
+    .bg-left,
+    .bg-right{
+        width:52%;
+        opacity:0.35;
+    }
+
+    h1{
+        font-size:25px;
+    }
+
+    .card{
+        margin-top:20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="main">
+
+    <img src="stalin.png" class="bg-left">
+    <img src="udhayanidhi.png" class="bg-right">
+
+    <div class="card">
+        <img src="logo.png" class="logo">
+
+        <h1>உடன்பிறப்புகளாய்<br>இணைவோம்</h1>
+
+        <p class="subtitle">
+            திராவிட முன்னேற்றக் கழக<br>
+            உறுப்பினர் சேர்க்கை
+        </p>
+
+        <input 
+            type="text" 
+            id="voterId" 
+            class="input-box" 
+            placeholder="வாக்காளர் எண் உள்ளிடவும்">
+
+        <button class="btn" onclick="goNext()">
+            தொடரவும்
+        </button>
+
+        <p class="note">ஏற்கனவே பதிவு செய்துள்ளீர்களா?</p>
+
+        <button class="btn download">
+            உறுப்பினர் அட்டை பதிவிறக்கவும்
+        </button>
+    </div>
+
+    <div class="footer">
+        Created by Ravin Tech
+    </div>
+
+</div>
+
+<script>
+function goNext(){
+    let voterId = document.getElementById("voterId").value;
+
+    if(voterId === ""){
+        alert("வாக்காளர் எண்ணை உள்ளிடவும்");
+    }else{
+        localStorage.setItem("voterId", voterId);
+        window.location.href = "form.html";
+    }
+}
+</script>
+
+</body>
+  </html>

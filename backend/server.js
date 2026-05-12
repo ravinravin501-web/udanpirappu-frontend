@@ -9,10 +9,6 @@ app.use(express.json());
 
 const MONGO_URL = process.env.MONGO_URL;
 
-if (!MONGO_URL) {
-  console.log("MONGO_URL is missing");
-}
-
 mongoose.connect(MONGO_URL)
 .then(() => console.log("MongoDB connected successfully"))
 .catch(err => console.log("MongoDB connection error:", err));
@@ -50,8 +46,6 @@ app.post("/api/register", async (req, res) => {
     });
 
   } catch (error) {
-    console.log("Register error:", error);
-
     res.status(500).json({
       success: false,
       message: error.message
@@ -70,6 +64,95 @@ app.get("/api/members", async (req, res) => {
     });
   }
 });
+
+/* SMS OTP SECTION */
+
+let otpStore = {};
+
+app.post("/api/send-otp", async (req, res) => {
+  try {
+    const { phone } = req.body;
+
+    if (!phone) {
+      return res.json({
+        success: false,
+        message: "Phone number required"
+      });
+    }
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    otpStore[phone] = {
+      otp: otp,
+      expires: Date.now() + 5 * 60 * 1000
+    };
+
+    const response = await fetch("https://www.fast2sms.com/dev/bulkV2", {
+      method: "POST",
+      headers: {
+        authorization: process.env.FAST2SMS_API_KEY,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        route: "otp",
+        variables_values: otp,
+        numbers: phone
+      })
+    });
+
+    const result = await response.json();
+
+    res.json({
+      success: true,
+      message: "OTP sent successfully",
+      result: result
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+});
+
+app.post("/api/verify-otp", (req, res) => {
+  const { phone, otp } = req.body;
+
+  const savedOtp = otpStore[phone];
+
+  if (!savedOtp) {
+    return res.json({
+      success: false,
+      message: "OTP not found"
+    });
+  }
+
+  if (Date.now() > savedOtp.expires) {
+    delete otpStore[phone];
+
+    return res.json({
+      success: false,
+      message: "OTP expired"
+    });
+  }
+
+  if (savedOtp.otp === otp) {
+    delete otpStore[phone];
+
+    return res.json({
+      success: true,
+      message: "OTP verified"
+    });
+  }
+
+  res.json({
+    success: false,
+    message: "Wrong OTP"
+  });
+});
+
+/* SERVER START */
 
 const PORT = process.env.PORT || 5000;
 

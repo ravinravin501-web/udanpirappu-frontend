@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>உறுப்பினர் பதிவு</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#000,#300000,#9b0000);
+    color:white;
+    padding:20px;
+}
+
+.form-box{
+    width:100%;
+    max-width:430px;
+    margin:30px auto;
+    background:rgba(0,0,0,0.88);
+    border:2px solid #ffcc00;
+    border-radius:25px;
+    padding:25px;
+    box-shadow:0 0 30px rgba(255,0,0,0.5);
+}
+
+h1{
+    text-align:center;
+    color:#ffcc00;
+    margin-bottom:20px;
+    font-size:28px;
+}
+
+label{
+    display:block;
+    margin-top:15px;
+    margin-bottom:6px;
+    color:#ffcc00;
+    font-weight:bold;
+}
+
+input, select, textarea{
+    width:100%;
+    padding:13px;
+    border:none;
+    border-radius:12px;
+    font-size:16px;
+    outline:none;
+}
+
+textarea{
+    height:90px;
+}
+
+button{
+    width:100%;
+    margin-top:25px;
+    padding:15px;
+    border:none;
+    border-radius:15px;
+    background:red;
+    color:white;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#cc0000;
+}
+</style>
+</head>
+
+<body>
+
+<div class="form-box">
+    <h1>உறுப்பினர் பதிவு</h1>
+
+    <label>வாக்காளர் எண்</label>
+    <input type="text" id="voterId" readonly>
+
+    <label>பெயர்</label>
+    <input type="text" id="name" placeholder="உங்கள் பெயர்">
+
+    <label>தந்தை / கணவர் பெயர்</label>
+    <input type="text" id="fatherName" placeholder="தந்தை / கணவர் பெயர்">
+
+    <label>பிறந்த தேதி</label>
+    <input type="date" id="dob">
+
+    <label>பாலினம்</label>
+    <select id="gender">
+        <option value="">தேர்வு செய்யவும்</option>
+        <option>ஆண்</option>
+        <option>பெண்</option>
+        <option>மற்ற

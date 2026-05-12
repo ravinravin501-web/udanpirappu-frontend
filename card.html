@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>உறுப்பினர் அட்டை</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#000,#300000,#9b0000);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    color:white;
+}
+
+.card-container{
+    width:100%;
+    max-width:380px;
+}
+
+.member-card{
+    background:linear-gradient(135deg,#111,#3b0000,#b30000);
+    border-radius:25px;
+    overflow:hidden;
+    border:3px solid #ffcc00;
+    box-shadow:0 0 35px rgba(255,0,0,0.5);
+}
+
+.top{
+    background:#ffcc00;
+    padding:15px;
+    text-align:center;
+    color:#000;
+    font-weight:bold;
+    font-size:22px;
+}
+
+.middle{
+    padding:25px;
+    text-align:center;
+}
+
+.logo{
+    width:80px;
+    margin-bottom:15px;
+}
+
+.photo{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    border:4px solid #ffcc00;
+    object-fit:cover;
+    margin-bottom:15px;
+}
+
+.name{
+    font-size:24px;
+    color:#ffcc00;
+    margin-bottom:10px;
+    font-weight:bold;
+}
+
+.details{
+    text-align:left;
+    margin-top:20px;
+    line-height:2;
+    font-size:16px;
+}
+
+.details span{
+    color:#ffcc00;
+    font-weight:bold;
+}
+
+.footer{
+    text-align:center;
+    padding:15px;
+    background:#000;
+    color:#ffcc00;
+    font-size:14px;
+}
+
+.btn{
+    width:100%;
+    margin-top:20px;
+    padding:15px;
+    border:none;
+    border-radius:15px;
+    background:red;
+    color:white;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.btn:hover{
+    background:#cc0000;
+}
+
+.upload-box{
+    margin-bottom:15px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card-container">
+
+    <div class="member-card" id="card">
+
+        <div class="top">
+            திமுக உறுப்பினர் அட்டை
+        </div>
+
+        <div class="middle">
+
+            <img src="logo.png" class="logo">
+
+            <div class="upload-box">
+                <input type="file" id="photoInput" accept="image/*">
+            </div>
+
+            <img src="https://via.placeholder.com/120"
+                 id="preview"
+                 class="photo">
+
+            <div class="name" id="memberName">
+                பெயர்
+            </div>
+
+            <div class="details">
+
+                <div>
+                    <span>வாக்காளர் எண் :</span>
+                    <span id="voterId"></span>
+                </div>
+
+                <div>
+                    <span>மொபைல் :</span>
+                    <span id="phone"></span>
+                </div>
+
+                <div>
+                    <span>மாவட்டம் :</span>
+                    <span id="district"></span>
+                </div>
+
+                <div>
+                    <span>தொகுதி :</span>
+                    <span id="constituency"></span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="footer">
+            Created by Ravin Tech
+        </div>
+
+    </div>
+
+    <button class="btn" onclick="downloadCard()">
+        அட்டை பதிவிறக்கவும்
+    </button>
+
+</div>
+
+<script>
+
+let data = JSON.parse(localStorage.getItem("memberData"));
+
+if(data){
+
+    document.getElementById("memberName").innerText = data.name;
+    document.getElementById("voterId").innerText = data.voterId;
+    document.getElementById("phone").innerText = data.phone;
+    document.getElementById("district").innerText = data.district;
+    document.getElementById("constituency").innerText = data.constituency;
+
+}
+
+document.getElementById("photoInput").addEventListener("change", function(e){
+
+    const file = e.target.files[0];
+
+    if(file){
+
+        const reader = new FileReader();
+
+        reader.onload = function(event){
+            document.getElementById("preview").src = event.target.result;
+        }
+
+        reader.readAsDataURL(file);
+
+    }
+
+});
+
+function downloadCard(){
+
+    alert("Screenshot the card now.\n\nLater we will add real download feature.");
+
+}
+
+</script>
+
+</body>
+</html>

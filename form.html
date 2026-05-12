@@ -75,6 +75,30 @@ button{
 button:hover{
     background:#cc0000;
 }
+
+.otp-btn{
+    background:#ffcc00;
+    color:#000;
+    margin-top:12px;
+}
+
+.verify-btn{
+    background:#111;
+    color:#ffcc00;
+    border:2px solid #ffcc00;
+    margin-top:12px;
+}
+
+.otp-input{
+    margin-top:12px;
+}
+
+#otpStatus{
+    text-align:center;
+    margin-top:10px;
+    color:#ffcc00;
+    font-weight:bold;
+}
 </style>
 </head>
 
@@ -106,6 +130,18 @@ button:hover{
     <label>தொலைபேசி எண்</label>
     <input type="tel" id="phone" placeholder="மொபைல் எண்">
 
+    <button type="button" class="otp-btn" onclick="sendOtp()">
+        OTP அனுப்பு
+    </button>
+
+    <input type="text" id="otp" class="otp-input" placeholder="OTP உள்ளிடவும்">
+
+    <button type="button" class="verify-btn" onclick="verifyOtp()">
+        OTP சரிபார்க்கவும்
+    </button>
+
+    <p id="otpStatus"></p>
+
     <label>மாவட்டம்</label>
     <input type="text" id="district" value="கன்னியாகுமரி">
 
@@ -130,6 +166,80 @@ button:hover{
 
 document.getElementById("voterId").value = localStorage.getItem("voterId") || "";
 
+let otpVerified = false;
+
+function sendOtp(){
+
+    let phone = document.getElementById("phone").value;
+
+    if(phone === ""){
+        alert("மொபைல் எண்ணை உள்ளிடவும்");
+        return;
+    }
+
+    fetch("https://udanpirappu-backend.onrender.com/api/send-otp",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+            phone: phone
+        })
+    })
+    .then(res=>res.json())
+    .then(data=>{
+
+        if(data.success){
+            document.getElementById("otpStatus").innerText = "OTP அனுப்பப்பட்டது";
+        }else{
+            alert(data.message);
+        }
+
+    })
+    .catch(err=>{
+        alert("OTP அனுப்ப முடியவில்லை");
+    });
+
+}
+
+function verifyOtp(){
+
+    let phone = document.getElementById("phone").value;
+    let otp = document.getElementById("otp").value;
+
+    if(otp === ""){
+        alert("OTP உள்ளிடவும்");
+        return;
+    }
+
+    fetch("https://udanpirappu-backend.onrender.com/api/verify-otp",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+            phone: phone,
+            otp: otp
+        })
+    })
+    .then(res=>res.json())
+    .then(data=>{
+
+        if(data.success){
+            otpVerified = true;
+            document.getElementById("otpStatus").innerText = "OTP சரிபார்ப்பு வெற்றி ✅";
+        }else{
+            otpVerified = false;
+            document.getElementById("otpStatus").innerText = "OTP தவறு ❌";
+        }
+
+    })
+    .catch(err=>{
+        alert("OTP சரிபார்க்க முடியவில்லை");
+    });
+
+}
+
 function submitForm(){
 
     let memberData = {
@@ -146,6 +256,11 @@ function submitForm(){
 
     if(memberData.name === "" || memberData.phone === "" || memberData.constituency === ""){
         alert("பெயர், மொபைல் எண், தொகுதி கட்டாயம்");
+        return;
+    }
+
+    if(!otpVerified){
+        alert("முதலில் OTP சரிபார்க்கவும்");
         return;
     }
 
@@ -175,4 +290,4 @@ function submitForm(){
 </script>
 
 </body>
-</html>
+    </html>
